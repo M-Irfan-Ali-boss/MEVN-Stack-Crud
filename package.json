@@ -1,0 +1,21 @@
+{
+  "name": "mevn-vuex-crud",
+  "version": "1.0.0",
+  "description": "This the MEVN Stack Crud Project using Vuex",
+  "main": "index.js",
+  "scripts": {
+    "start": "node backend/index.js",
+    "dev": "nodemon backend/index.js"
+  },
+  "author": "Zawari Developers Group",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.5"
+  }
+}
