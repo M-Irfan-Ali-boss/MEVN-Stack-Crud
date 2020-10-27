@@ -29,11 +29,19 @@ router.get('/', (req, res) => {
 
 //Fetch Single User
 router.get('/:id', (req, res) => {
-  try {
-    res.send('Server Testing');
-  } catch (err) {
-    throw err;
-  }
+  const sql = 'Select * from users Where id = ?';
+  const id = req.params.id;
+  connection.query(sql, id, (err, result) => {
+    if (err) {
+      res.status(404).send('User Not Found!');
+    } else {
+      if (result.length > 0) {
+        res.json(result);
+      } else {
+        res.status(404).send('User Not Found!');
+      }
+    }
+  });
 });
 
 //Add User
@@ -73,11 +81,15 @@ router.put('/:id', (req, res) => {
 
 //Delete User
 router.delete('/:id', (req, res) => {
-  try {
-    res.send('Server Testing');
-  } catch (err) {
-    throw err;
-  }
+  const id = req.params.id;
+  const sql = 'Delete from users Where id = ?';
+  connection.query(sql, id, (err, result) => {
+    if (err) {
+      res.status(404).send('User Not Found!');
+    } else {
+      res.status(200).send('User Deleted Successfully!');
+    }
+  });
 });
 
 module.exports = router;

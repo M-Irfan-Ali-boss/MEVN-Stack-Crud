@@ -1,6 +1,9 @@
 <template>
   <div class="hello">
     <h1>Welcome to Your Vue-Vuex App</h1>
+    <div class="alert alert-success" role="alert" v-if="deleted">
+      User has been successfully deleted!
+    </div>
     <div class="table-responsive my-5">
       <div class="table-wrapper">
         <div class="table-title mb-4 text-left">
@@ -17,14 +20,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Thomas Hardy</td>
-              <td>thomashardy@mail.com</td>
-              <td>(171) 555-2222</td>
-              <td>89 Chiaroscuro Rd, Portland, USA</td>
+            <tr v-for="user in users" :key="user.id">
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.phone }}</td>
+              <td>{{ user.address }}</td>
               <td>
-                <router-link to="/edit-user/1"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></router-link>
-                <router-link to="/delete-user"><i class="material-icons text-danger" data-toggle="tooltip" title="Delete">&#xE872;</i></router-link>
+                <button @click="editUser(user.id)"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></button>
+                <button @click="deleteUser(user.id)"><i class="material-icons text-danger" data-toggle="tooltip" title="Delete">&#xE872;</i></button>
               </td>
             </tr>
           </tbody>
@@ -35,8 +38,35 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'Layout',
+  data() {
+    return {
+      deleted: false,
+    };
+  },
+  computed: mapState(['users']),
+  methods: {
+    editUser(id) {
+      this.$router.push(`/edit-user/${id}`);
+    },
+    async deleteUser(id) {
+      const result = await this.$store.dispatch('deleteUser', id);
+      if (result === 1) {
+        this.deleted = true;
+        setTimeout(() => {
+          this.deleted = false;
+        }, 2000);
+      } else {
+        this.deleted = false;
+      }
+    },
+  },
+  created() {
+    this.$store.dispatch('getAllUsers');
+  },
 };
 </script>
 
@@ -55,5 +85,12 @@ li {
 }
 a {
   color: #42b983;
+}
+button {
+  background: transparent;
+  border: 0;
+}
+button:focus {
+  outline: none;
 }
 </style>
